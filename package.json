@@ -17,6 +17,19 @@
     "url": "https://github.com/Efe-Onoh/25--5-clock/issues"
   },
   "homepage": "https://github.com/Efe-Onoh/25--5-clock#readme",
+  "nodemonConfig": {
+    "ignore": [
+      ".git",
+      "node_modules/**/node_modules",
+      "app.js",
+      "app.css"
+    ],
+    "verbose": true,
+    "events": {
+      "restart": "npm run build"
+    },
+    "ext": "js json sass html"
+  },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.8",
