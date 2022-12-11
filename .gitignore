@@ -102,3 +102,10 @@ dist
 
 # TernJS port file
 .tern-port
+
+#babel config
+babel.config.json
+
+#sass style
+styles/app.sass
+styles/app.css.map

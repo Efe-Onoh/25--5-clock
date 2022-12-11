@@ -1,0 +1,27 @@
+{
+  "name": "25--5-clock",
+  "version": "1.0.0",
+  "description": "A 25+5 clock using react",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": " babel index.js -o app.js && sass styles/app.sass styles/app.css "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Efe-Onoh/25--5-clock.git"
+  },
+  "author": "Efe-Onoh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Efe-Onoh/25--5-clock/issues"
+  },
+  "homepage": "https://github.com/Efe-Onoh/25--5-clock#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-react": "^7.14.5",
+    "sass": "^1.43.2"
+  }
+}
