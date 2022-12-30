@@ -1,5 +1,8 @@
+"use strict";
 
-
+var _react = _interopRequireDefault(require("react"));
+var _client = require("react-dom/client");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 // !!! IMPORTANT README:
 
 // You may add additional external JS and CSS as needed to complete the project, however the current external resource MUST remain in place for the tests to work. BABEL must also be left in place. 
@@ -28,4 +31,34 @@ INSTRUCTIONS:
 
 // Once you have read the above messages, you can delete all comments. 
 
-// ReactDOM.render(<AppWrapper/>, document.querySelector('#root'));
+// //import { Provider, connect } from 'react-redux'
+// //import { createStore } from 'redux'
+
+//React
+var App = function App(props) {
+  return /*#__PURE__*/_react["default"].createElement("div", null, /*#__PURE__*/_react["default"].createElement("h1", null, "Hello World"));
+};
+var root = (0, _client.createRoot)(document.querySelector('#root'));
+root.render( /*#__PURE__*/_react["default"].createElement(App, null));
+// 'use strict';
+
+// const e = React.createElement;
+
+// class LikeButton extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = { liked: false };
+//   }
+
+//   render() {
+//     if (this.state.liked) {
+//       return 'You liked this.';
+//     }
+
+//     return e(
+//       'button',
+//       { onClick: () => this.setState({ liked: true }) },
+//       'Like'
+//     );
+//   }
+// }

@@ -1,5 +1,6 @@
 {
   "name": "25--5-clock",
+  "type": "module",
   "version": "1.0.0",
   "description": "A 25+5 clock using react",
   "main": "index.js",
@@ -31,10 +32,16 @@
     "ext": "js json sass html"
   },
   "devDependencies": {
-    "@babel/cli": "^7.15.7",
-    "@babel/core": "^7.15.8",
-    "@babel/preset-env": "^7.15.8",
-    "@babel/preset-react": "^7.14.5",
-    "sass": "^1.43.2"
+    "@babel/cli": "^7.20.7",
+    "@babel/core": "^7.20.7",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6",
+    "sass": "^1.57.1"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
+    "redux": "^4.2.0"
   }
 }

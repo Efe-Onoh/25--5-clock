@@ -29,4 +29,45 @@ INSTRUCTIONS:
 // Once you have read the above messages, you can delete all comments. 
 
 
-// ReactDOM.render(<AppWrapper/>, document.querySelector('#root'));
+import React from "react";
+import ReactDOM from "react-dom/client";
+// //import { Provider, connect } from 'react-redux'
+// //import { createStore } from 'redux'
+
+//React
+const App = (props)=>{
+  return (
+    <div>
+      <h1>Hello World</h1>
+    </div>
+  )
+}
+
+const root = ReactDOM.createRoot(document.querySelector('#root'))
+root.render(<App />);
+// 'use strict';
+
+// const e = React.createElement;
+
+// class LikeButton extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = { liked: false };
+//   }
+
+//   render() {
+//     if (this.state.liked) {
+//       return 'You liked this.';
+//     }
+
+//     return e(
+//       'button',
+//       { onClick: () => this.setState({ liked: true }) },
+//       'Like'
+//     );
+//   }
+// }
+
+//react not mounting to DOM
+//react-dom import having some issue
+//check problem with import and fix react-dom import
