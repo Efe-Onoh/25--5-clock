@@ -29,45 +29,94 @@ INSTRUCTIONS:
 // Once you have read the above messages, you can delete all comments. 
 
 
-import React from "react";
-import ReactDOM from "react-dom/client";
 // //import { Provider, connect } from 'react-redux'
 // //import { createStore } from 'redux'
 
 //React
-const App = (props)=>{
+const {useState, useEffect} = React;
+
+const App = ()=>{
+   // State for break and session lengths
+   const [breakLength, setBreakLength] = useState(5);
+   const [sessionLength, setSessionLength] = useState(25);
+   const [timerLabel, setTimerLabel] = useState("Session");
+   const [timeLeft, setTimeLeft] = useState(sessionLength * 60); 
+   const [isRunning, setIsRunning] = useState(false);
+ 
+   useEffect(() => {
+    setTimeLeft(sessionLength * 60);
+  }, [sessionLength]);
+
+  // Function to decrement break or session length
+  const decrementLength = (type) => {
+    if (type === 'break' && breakLength > 1) {
+      setBreakLength(breakLength - 1);
+    } else if (type === 'session' && sessionLength > 1) {
+      setSessionLength(sessionLength - 1);
+    }
+  };
+
+  // Function to increment break or session length
+  const incrementLength = (type) => {
+    if (type === 'break' && breakLength < 60) {
+      setBreakLength(breakLength + 1);
+    } else if (type === 'session' && sessionLength < 60) {
+      setSessionLength(sessionLength + 1);
+    }
+  };
+
+  const toggleTimer = () => {
+    setTimerLabel(isRunning ? "Session" : "Break");
+    setIsRunning(!isRunning);
+  };
+
+  const resetTimer = () => {
+    setIsRunning(false);
+    setTimerLabel("Session");
+    setSessionLength(25);
+    setBreakLength(5);
+    setTimeLeft(25 * 60);
+  };
+
   return (
-    <div>
-      <h1>Hello World</h1>
+    <div >
+      <label id="break-label">Break Length</label>
+      <label id="session-label">Session Length</label>
+
+      <div>
+        <button id="break-decrement" onClick={() => decrementLength('break')}>
+          Break Decrement
+        </button>
+        <button id="session-decrement" onClick={() => decrementLength('session')}>
+          Session Decrement
+        </button>
+        <button id="break-increment" onClick={() => incrementLength('break')}>
+          Break Increment
+        </button>
+        <button id="session-increment" onClick={() => incrementLength('session')}>
+          Session Increment
+        </button>
+      </div>
+
+      <div id="break-length">{breakLength}</div>
+
+      <div id="session-length">{sessionLength}</div>
+      <div id="timer-label">{timerLabel}</div>
+      <div id="time-left">{`${Math.floor(timeLeft / 60)
+        .toString()
+        .padStart(2, '0')}:${(timeLeft % 60).toString().padStart(2, '0')}`}</div>
+     
+      <div>
+        <button id="start_stop" onClick={toggleTimer}>
+          Start/Stop
+        </button>
+        <button id="reset" onClick={resetTimer}>
+          Reset
+        </button>
+      </div>
     </div>
   )
 }
 
-const root = ReactDOM.createRoot(document.querySelector('#root'))
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<App />);
-// 'use strict';
-
-// const e = React.createElement;
-
-// class LikeButton extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = { liked: false };
-//   }
-
-//   render() {
-//     if (this.state.liked) {
-//       return 'You liked this.';
-//     }
-
-//     return e(
-//       'button',
-//       { onClick: () => this.setState({ liked: true }) },
-//       'Like'
-//     );
-//   }
-// }
-
-//react not mounting to DOM
-//react-dom import having some issue
-//check problem with import and fix react-dom import
