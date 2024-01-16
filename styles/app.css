@@ -77,8 +77,8 @@ body {
   gap: 5px;
   margin-top: 20px;
 }
-.timer-controls button {
-  background-color: #e44d26;
+.timer-controls button:nth-child(1) {
+  background-color: #5a6e54;
   color: #fff;
   border: none;
   padding: 5px 20px;
@@ -87,8 +87,21 @@ body {
   border-radius: 2px;
   transition: background-color 0.3s;
 }
-.timer-controls button:hover {
-  background-color: #d24a25;
+.timer-controls button:nth-child(1):hover {
+  background-color: #475e46;
+}
+.timer-controls button:nth-child(2) {
+  background-color: #4a5b6e;
+  color: #fff;
+  border: none;
+  padding: 5px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 0.3s;
+}
+.timer-controls button:nth-child(2):hover {
+  background-color: #3d4b5b;
 }
 
 /*# sourceMappingURL=app.css.map */
