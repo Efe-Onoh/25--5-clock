@@ -105,33 +105,47 @@ const App = ()=>{
 
   
   return (
-    <div >
-      <label id="break-label">Break Length</label>
-      <label id="session-label">Session Length</label>
-
-      <div>
-        <button id="break-decrement" onClick={() => decrementLength('break')}>
-          Break Decrement
-        </button>
-        <button id="session-decrement" onClick={() => decrementLength('session')}>
-          Session Decrement
-        </button>
-        <button id="break-increment" onClick={() => incrementLength('break')}>
-          Break Increment
-        </button>
-        <button id="session-increment" onClick={() => incrementLength('session')}>
-          Session Increment
-        </button>
+    <div className="app-container">
+      <div className="length-controls">
+        <div className="controls">
+          <button id="break-decrement" onClick={() => decrementLength('break')}>
+            Break Decrement
+          </button>
+          <button id="session-decrement" onClick={() => decrementLength('session')}>
+            Session Decrement
+          </button>
+          <button id="break-increment" onClick={() => incrementLength('break')}>
+            Break Increment
+          </button>
+          <button id="session-increment" onClick={() => incrementLength('session')}>
+            Session Increment
+          </button>
+        </div>
       </div>
 
-      <div id="break-length">{breakLength}</div>
+      <div className="length-display">
+        <div id="break">
+          
+        <label id="break-label">Break Length: </label>
+        <div id="break-length">{breakLength}</div>
+        
+        </div>
+        <div id="session">
+          
+        <label id="session-label">Session Length: </label>
+        <div id="session-length">{sessionLength}</div>
+            
+        </div>
+      </div>
 
-      <div id="session-length">{sessionLength}</div>
-      <div id="timer-label">{timerLabel}</div>
-      <div id="time-left">{formatTime(timeLeft)}</div>
-      <div id="time-left2">{timeLeft}</div>
+      <div className="timer-display">
 
-      <div>
+        <div id="timer-label">{timerLabel}</div>
+        <div id="time-left">{formatTime(timeLeft)}</div>
+        <div id="time-left2">{timeLeft}</div>
+      </div>
+
+      <div className="timer-controls">
         <button id="start_stop" onClick={toggleTimer}>
           Start/Stop
         </button>

@@ -119,11 +119,13 @@ var App = function App() {
   var formatTime = function formatTime(time) {
     return "".concat(Math.floor(time / 60).toString().padStart(2, '0'), ":").concat((time % 60).toString().padStart(2, '0'));
   };
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    id: "break-label"
-  }, "Break Length"), /*#__PURE__*/React.createElement("label", {
-    id: "session-label"
-  }, "Session Length"), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "app-container"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "length-controls"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "controls"
+  }, /*#__PURE__*/React.createElement("button", {
     id: "break-decrement",
     onClick: function onClick() {
       return decrementLength('break');
@@ -143,17 +145,31 @@ var App = function App() {
     onClick: function onClick() {
       return incrementLength('session');
     }
-  }, "Session Increment")), /*#__PURE__*/React.createElement("div", {
+  }, "Session Increment"))), /*#__PURE__*/React.createElement("div", {
+    className: "length-display"
+  }, /*#__PURE__*/React.createElement("div", {
+    id: "break"
+  }, /*#__PURE__*/React.createElement("label", {
+    id: "break-label"
+  }, "Break Length: "), /*#__PURE__*/React.createElement("div", {
     id: "break-length"
-  }, breakLength), /*#__PURE__*/React.createElement("div", {
+  }, breakLength)), /*#__PURE__*/React.createElement("div", {
+    id: "session"
+  }, /*#__PURE__*/React.createElement("label", {
+    id: "session-label"
+  }, "Session Length: "), /*#__PURE__*/React.createElement("div", {
     id: "session-length"
-  }, sessionLength), /*#__PURE__*/React.createElement("div", {
+  }, sessionLength))), /*#__PURE__*/React.createElement("div", {
+    className: "timer-display"
+  }, /*#__PURE__*/React.createElement("div", {
     id: "timer-label"
   }, timerLabel), /*#__PURE__*/React.createElement("div", {
     id: "time-left"
   }, formatTime(timeLeft)), /*#__PURE__*/React.createElement("div", {
     id: "time-left2"
-  }, timeLeft), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
+  }, timeLeft)), /*#__PURE__*/React.createElement("div", {
+    className: "timer-controls"
+  }, /*#__PURE__*/React.createElement("button", {
     id: "start_stop",
     onClick: toggleTimer
   }, "Start/Stop"), /*#__PURE__*/React.createElement("button", {
