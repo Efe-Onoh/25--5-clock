@@ -6,41 +6,11 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-// !!! IMPORTANT README:
-
-// You may add additional external JS and CSS as needed to complete the project, however the current external resource MUST remain in place for the tests to work. BABEL must also be left in place. 
-
-/***********
-INSTRUCTIONS:
-  - Select the project you would 
-    like to complete from the dropdown 
-    menu.
-  - Click the "RUN TESTS" button to
-    run the tests against the blank 
-    pen.
-  - Click the "TESTS" button to see 
-    the individual test cases. 
-    (should all be failing at first)
-  - Start coding! As you fulfill each
-    test case, you will see them go   
-    from red to green.
-  - As you start to build out your 
-    project, when tests are failing, 
-    you should get helpful errors 
-    along the way!
-    ************/
-
-// PLEASE NOTE: Adding global style rules using the * selector, or by adding rules to body {..} or html {..}, or to all elements within body or html, i.e. h1 {..}, has the potential to pollute the test suite's CSS. Try adding: * { color: red }, for a quick example!
-
-// Once you have read the above messages, you can delete all comments. 
-
-// //import { Provider, connect } from 'react-redux'
-// //import { createStore } from 'redux'
-
 //React
 var _React = React,
   useState = _React.useState,
-  useEffect = _React.useEffect;
+  useEffect = _React.useEffect,
+  useRef = _React.useRef;
 var App = function App() {
   // State for break and session lengths
   var _useState = useState(5),
@@ -63,30 +33,78 @@ var App = function App() {
     _useState10 = _slicedToArray(_useState9, 2),
     isRunning = _useState10[0],
     setIsRunning = _useState10[1];
+  var _useState11 = useState(null),
+    _useState12 = _slicedToArray(_useState11, 2),
+    timerId = _useState12[0],
+    setTimerId = _useState12[1];
+  var audioRef = useRef(null);
   useEffect(function () {
     setTimeLeft(sessionLength * 60);
   }, [sessionLength]);
-
+  useEffect(function () {
+    setTimeLeft(breakLength * 60);
+  }, [breakLength]);
+  useEffect(function () {
+    if (timeLeft === 0) {
+      clearInterval(timerId);
+      if (timerLabel === "Session") {
+        audioRef.current.play();
+        setTimerLabel("Break");
+        setTimeLeft(breakLength * 60);
+      } else {
+        audioRef.current.play();
+        setTimerLabel("Session");
+        setTimeLeft(sessionLength * 60);
+      }
+      startTimer();
+    }
+  }, [timeLeft, timerLabel, breakLength, sessionLength]);
   // Function to decrement break or session length
   var decrementLength = function decrementLength(type) {
-    if (type === 'break' && breakLength > 1) {
-      setBreakLength(breakLength - 1);
-    } else if (type === 'session' && sessionLength > 1) {
-      setSessionLength(sessionLength - 1);
+    if (!isRunning) {
+      if (type === "break" && breakLength > 1) {
+        setBreakLength(breakLength - 1);
+        setTimeLeft(breakLength - 1 * 60);
+      } else if (type === "session" && sessionLength > 1) {
+        setSessionLength(sessionLength - 1);
+        setTimeLeft(sessionLength - 1 * 60);
+      }
     }
   };
 
   // Function to increment break or session length
   var incrementLength = function incrementLength(type) {
-    if (type === 'break' && breakLength < 60) {
-      setBreakLength(breakLength + 1);
-    } else if (type === 'session' && sessionLength < 60) {
-      setSessionLength(sessionLength + 1);
+    if (!isRunning) {
+      if (type === "break" && breakLength < 60) {
+        setBreakLength(breakLength + 1);
+        setTimeLeft(breakLength + 1 * 60);
+      } else if (type === "session" && sessionLength < 60) {
+        setSessionLength(sessionLength + 1);
+        setTimeLeft(sessionLength + 1 * 60);
+      }
     }
   };
   var toggleTimer = function toggleTimer() {
-    setTimerLabel(isRunning ? "Session" : "Break");
-    setIsRunning(!isRunning);
+    if (!isRunning) {
+      setIsRunning(true);
+      startTimer();
+    } else {
+      setIsRunning(false);
+      clearInterval(timerId);
+    }
+  };
+  var startTimer = function startTimer() {
+    var id = setInterval(function () {
+      setTimeLeft(function (prevTime) {
+        // if (prevTime > 0) {
+        //   return prevTime - 1;
+        // } else {
+        //   return 0; 
+        // }
+        return prevTime - 1;
+      });
+    }, 1000);
+    setTimerId(id);
   };
   var resetTimer = function resetTimer() {
     setIsRunning(false);
@@ -94,6 +112,12 @@ var App = function App() {
     setSessionLength(25);
     setBreakLength(5);
     setTimeLeft(25 * 60);
+    clearInterval(timerId);
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+  };
+  var formatTime = function formatTime(time) {
+    return "".concat(Math.floor(time / 60).toString().padStart(2, '0'), ":").concat((time % 60).toString().padStart(2, '0'));
   };
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
     id: "break-label"
@@ -127,13 +151,21 @@ var App = function App() {
     id: "timer-label"
   }, timerLabel), /*#__PURE__*/React.createElement("div", {
     id: "time-left"
-  }, "".concat(Math.floor(timeLeft / 60).toString().padStart(2, '0'), ":").concat((timeLeft % 60).toString().padStart(2, '0'))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
+  }, formatTime(timeLeft)), /*#__PURE__*/React.createElement("div", {
+    id: "time-left2"
+  }, timeLeft), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     id: "start_stop",
     onClick: toggleTimer
   }, "Start/Stop"), /*#__PURE__*/React.createElement("button", {
     id: "reset",
     onClick: resetTimer
-  }, "Reset")));
+  }, "Reset")), /*#__PURE__*/React.createElement("audio", {
+    id: "beep",
+    ref: audioRef,
+    src: "https://s3.amazonaws.com/freecodecamp/drums/Chord_3.mp3"
+  }));
 };
-var root = ReactDOM.createRoot(document.getElementById("root"));
-root.render( /*#__PURE__*/React.createElement(App, null));
+
+// const root = ReactDOM.createRoot(document.getElementById("root"));
+// root.render(<App />);
+ReactDOM.render( /*#__PURE__*/React.createElement(App, null), document.getElementById("root"));

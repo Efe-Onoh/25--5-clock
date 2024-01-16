@@ -1,39 +1,5 @@
-
-
-// !!! IMPORTANT README:
-
-// You may add additional external JS and CSS as needed to complete the project, however the current external resource MUST remain in place for the tests to work. BABEL must also be left in place. 
-
-/***********
-INSTRUCTIONS:
-  - Select the project you would 
-    like to complete from the dropdown 
-    menu.
-  - Click the "RUN TESTS" button to
-    run the tests against the blank 
-    pen.
-  - Click the "TESTS" button to see 
-    the individual test cases. 
-    (should all be failing at first)
-  - Start coding! As you fulfill each
-    test case, you will see them go   
-    from red to green.
-  - As you start to build out your 
-    project, when tests are failing, 
-    you should get helpful errors 
-    along the way!
-    ************/
-
-// PLEASE NOTE: Adding global style rules using the * selector, or by adding rules to body {..} or html {..}, or to all elements within body or html, i.e. h1 {..}, has the potential to pollute the test suite's CSS. Try adding: * { color: red }, for a quick example!
-
-// Once you have read the above messages, you can delete all comments. 
-
-
-// //import { Provider, connect } from 'react-redux'
-// //import { createStore } from 'redux'
-
 //React
-const {useState, useEffect} = React;
+const {useState, useEffect, useRef} = React;
 
 const App = ()=>{
    // State for break and session lengths
@@ -42,42 +8,102 @@ const App = ()=>{
    const [timerLabel, setTimerLabel] = useState("Session");
    const [timeLeft, setTimeLeft] = useState(sessionLength * 60); 
    const [isRunning, setIsRunning] = useState(false);
- 
+   const [timerId, setTimerId] = useState(null);
+   
+   const audioRef = useRef(null);
+
    useEffect(() => {
     setTimeLeft(sessionLength * 60);
   }, [sessionLength]);
 
+  useEffect(() => {
+    setTimeLeft(breakLength * 60);
+  }, [breakLength]);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      clearInterval(timerId)
+      if (timerLabel === "Session") {
+        audioRef.current.play();
+        setTimerLabel("Break");
+        setTimeLeft(breakLength * 60);
+      } else {
+        audioRef.current.play();
+        setTimerLabel("Session");
+        setTimeLeft(sessionLength * 60);
+      }
+      startTimer();
+    }
+  }, [timeLeft, timerLabel, breakLength, sessionLength]);
   // Function to decrement break or session length
   const decrementLength = (type) => {
-    if (type === 'break' && breakLength > 1) {
-      setBreakLength(breakLength - 1);
-    } else if (type === 'session' && sessionLength > 1) {
-      setSessionLength(sessionLength - 1);
+    if (!isRunning) {
+      if (type === "break" && breakLength > 1) {
+        setBreakLength(breakLength - 1);
+        setTimeLeft(breakLength - 1 * 60);
+      } else if (type === "session" && sessionLength > 1) {
+        setSessionLength(sessionLength - 1);
+        setTimeLeft(sessionLength - 1 * 60);
+      }
     }
   };
 
+
   // Function to increment break or session length
   const incrementLength = (type) => {
-    if (type === 'break' && breakLength < 60) {
-      setBreakLength(breakLength + 1);
-    } else if (type === 'session' && sessionLength < 60) {
-      setSessionLength(sessionLength + 1);
+    if (!isRunning) {
+      if (type === "break" && breakLength < 60) {
+        setBreakLength(breakLength + 1);
+        setTimeLeft(breakLength + 1 * 60);
+      } else if (type === "session" && sessionLength < 60) {
+        setSessionLength(sessionLength + 1);
+        setTimeLeft(sessionLength + 1 * 60);
+      }
     }
   };
 
   const toggleTimer = () => {
-    setTimerLabel(isRunning ? "Session" : "Break");
-    setIsRunning(!isRunning);
+    if (!isRunning) {
+      setIsRunning(true);
+      startTimer();
+    } else {
+      setIsRunning(false);
+      clearInterval(timerId);
+    }
   };
 
+  const startTimer = () => {
+    const id = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        // if (prevTime > 0) {
+        //   return prevTime - 1;
+        // } else {
+        //   return 0; 
+        // }
+        return prevTime - 1
+      });
+    }, 1000);
+  
+    setTimerId(id);
+  };
+  
   const resetTimer = () => {
     setIsRunning(false);
     setTimerLabel("Session");
     setSessionLength(25);
     setBreakLength(5);
     setTimeLeft(25 * 60);
+    clearInterval(timerId);
+
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
   };
 
+  const formatTime = (time) => {
+    return `${Math.floor(time / 60).toString().padStart(2, '0')}:${(time % 60).toString().padStart(2, '0')}`;
+  };
+
+  
   return (
     <div >
       <label id="break-label">Break Length</label>
@@ -102,10 +128,9 @@ const App = ()=>{
 
       <div id="session-length">{sessionLength}</div>
       <div id="timer-label">{timerLabel}</div>
-      <div id="time-left">{`${Math.floor(timeLeft / 60)
-        .toString()
-        .padStart(2, '0')}:${(timeLeft % 60).toString().padStart(2, '0')}`}</div>
-     
+      <div id="time-left">{formatTime(timeLeft)}</div>
+      <div id="time-left2">{timeLeft}</div>
+
       <div>
         <button id="start_stop" onClick={toggleTimer}>
           Start/Stop
@@ -114,9 +139,13 @@ const App = ()=>{
           Reset
         </button>
       </div>
+
+      <audio id="beep" ref={audioRef} src="https://s3.amazonaws.com/freecodecamp/drums/Chord_3.mp3" />
+
     </div>
   )
 }
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+// const root = ReactDOM.createRoot(document.getElementById("root"));
+// root.render(<App />);
+ReactDOM.render(<App />,  document.getElementById("root"));
